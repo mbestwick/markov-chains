@@ -11,9 +11,13 @@ def open_and_read_file(file_path):
     the file's contents as one string of text.
     """
 
-    file_name = open(file_path)
-    file_name = file_name.read()
-    return file_name
+    f = open(file_path)
+
+    text = f.read()
+
+    f.close()
+
+    return text
 
 
 def make_chains(text_string):
@@ -44,18 +48,14 @@ def make_chains(text_string):
 
     for i in range(len(words) - 1):
         key = (words[i], words[i+1])
-        if words[i] == words[-2]:
-            if chains.get(key, 0) == 0:
-                chains[key] = list()
+        if (i == len(words) - 2) and (key not in chains):
+            chains[key] = []
         else:
-            if chains.get(key, 0) == 0:
-                chains[key] = list()
-                chains[key].append(words[i+2])
-            else:
-                for word_list in chains.values():
-                    word_list.append(words[i+2])
+            if key not in chains:
+                chains[key] = []
+            chains[key].append(words[i+2])
 
-    return chains
+    print chains
 
 
 def make_text(chains):
