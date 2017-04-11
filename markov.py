@@ -55,7 +55,7 @@ def make_chains(text_string):
                 chains[key] = []
             chains[key].append(words[i+2])
 
-    print chains
+    return chains
 
 
 def make_text(chains):
@@ -63,12 +63,18 @@ def make_text(chains):
 
     words = []
 
-    # your code goes here
+    current_key = choice(chains.keys())
+    words.extend(current_key)
+
+    while chains[current_key]:
+        new_link = choice(chains[current_key])
+        words.append(new_link)
+        current_key = tuple(words[-2:])
 
     return " ".join(words)
 
 
-input_path = "green-eggs.txt"
+input_path = "gettysburg.txt"
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
