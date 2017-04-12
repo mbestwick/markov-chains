@@ -4,6 +4,8 @@
 from random import choice
 import sys
 
+n = int(raw_input("What size would you like your n-grams to be? "))
+
 
 def open_and_read_file(file_path):
     """Takes file path as string; returns text as string.
@@ -21,7 +23,7 @@ def open_and_read_file(file_path):
     return text
 
 
-def make_chains(text_string):
+def make_chains(text_string, n):
     """Takes input text as string; returns dictionary of markov chains.
 
     A chain will be a key that consists of a tuple of (word1, word2)
@@ -47,26 +49,22 @@ def make_chains(text_string):
 
     words = text_string.split()
 
-    for i in range(len(words) - 2):     # changes from -1 to -2
+    for i in range(len(words) - (n - 1)):
 
-        first, second, third = words[i], words[i+1], words[i+2]     # add third = words[i+2]
-        key = (first, second, third)                    # add third to tuple
+        key = tuple(words[i:i + n])
 
         if key not in chains:
             chains[key] = []
 
         try:
-            fourth = words[i+3]     # changes from i+2 to i+3
-            chains[key].append(fourth)  # changes from third to fourth
+            chains[key].append(words[i+n])
         except:
             chains[key].append(None)
-
-    print chains
 
     return chains
 
 
-def make_text(chains):
+def make_text(chains, n):
     """Returns text from chains."""
 
     words = []
@@ -87,7 +85,7 @@ def make_text(chains):
     while True:
         new_link = choice(chains[current_key])
         words.append(new_link)
-        current_key = tuple(words[-3:])     # changes from -2 to -3
+        current_key = tuple(words[-n:])     # changes from -2 to -3
         if None in chains[current_key]:
             break
 
@@ -100,9 +98,9 @@ input_path = sys.argv[1]
 input_text = open_and_read_file(input_path)
 
 # Get a Markov chain
-chains = make_chains(input_text)
+chains = make_chains(input_text, n)
 
 # Produce random text
-random_text = make_text(chains)
+random_text = make_text(chains, n)
 
 print random_text
