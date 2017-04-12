@@ -69,24 +69,28 @@ def make_text(chains, n):
 
     words = []
 
-    # WORKING ON CAPITALIZATION
+    # CAPITALIZATION
+    upper_chains = []
 
-    # upper_chains = {}
+    for key in chains.keys():
+        if key[0][0].isupper():
+            upper_chains.append(key)
 
-    # for key, value in chains.items():
-    #     if key[0][0].isupper():
-    #         upper_chains[key] = value
+    # PUNCTUATION
+    ends_with_punct = []
 
-    # print upper_chains
+    for key in chains.keys():
+        if key[-1][-1] in ".!?":
+            ends_with_punct.append(key)
 
-    current_key = tuple(choice(chains.keys()))
+    current_key = choice(upper_chains)
     words.extend(current_key)
 
     while True:
         new_link = choice(chains[current_key])
         words.append(new_link)
-        current_key = tuple(words[-n:])     # changes from -2 to -3
-        if None in chains[current_key]:
+        current_key = tuple(words[-n:])
+        if None in chains[current_key] or [current_key] in ends_with_punct:
             break
 
     return " ".join(words)
