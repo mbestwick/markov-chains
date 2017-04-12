@@ -2,6 +2,7 @@
 
 
 from random import choice
+import sys
 
 
 def open_and_read_file(file_path):
@@ -47,13 +48,18 @@ def make_chains(text_string):
     words = text_string.split()
 
     for i in range(len(words) - 1):
-        key = (words[i], words[i+1])
-        if (i == len(words) - 2) and (key not in chains):
+
+        first, second = words[i], words[i+1]
+        key = (first, second)
+
+        if key not in chains:
             chains[key] = []
-        else:
-            if key not in chains:
-                chains[key] = []
-            chains[key].append(words[i+2])
+
+        try:
+            third = words[i+2]
+            chains[key].append(third)
+        except:
+            chains[key].append(None)
 
     return chains
 
@@ -63,18 +69,20 @@ def make_text(chains):
 
     words = []
 
-    current_key = choice(chains.keys())
+    current_key = tuple(choice(chains.keys()))
     words.extend(current_key)
 
-    while chains[current_key]:
+    while True:
         new_link = choice(chains[current_key])
         words.append(new_link)
         current_key = tuple(words[-2:])
+        if None in chains[current_key]:
+            break
 
     return " ".join(words)
 
 
-input_path = "gettysburg.txt"
+input_path = sys.argv[1]
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
