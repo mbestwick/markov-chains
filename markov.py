@@ -60,6 +60,7 @@ def make_chains(text_string, n):
             chains[key].append(words[i+n])
         except:
             chains[key].append(None)
+    
 
     return chains
 
@@ -76,12 +77,12 @@ def make_text(chains, n):
         if key[0][0].isupper():
             upper_chains.append(key)
 
-    # PUNCTUATION
-    ends_with_punct = []
+    # PUNCTUATION: not functional yet ???
+    # ends_with_punct = []
 
-    for key in chains.keys():
-        if key[-1][-1] in ".!?":
-            ends_with_punct.append(key)
+    # for key in chains.keys():
+    #     if key[-1][-1] == ".":
+    #         ends_with_punct.append(key)
 
     current_key = choice(upper_chains)
     words.extend(current_key)
@@ -90,7 +91,7 @@ def make_text(chains, n):
         new_link = choice(chains[current_key])
         words.append(new_link)
         current_key = tuple(words[-n:])
-        if None in chains[current_key] or [current_key] in ends_with_punct:
+        if None in chains[current_key]:
             break
 
     return " ".join(words)
