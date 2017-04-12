@@ -47,19 +47,21 @@ def make_chains(text_string):
 
     words = text_string.split()
 
-    for i in range(len(words) - 1):
+    for i in range(len(words) - 2):     # changes from -1 to -2
 
-        first, second = words[i], words[i+1]
-        key = (first, second)
+        first, second, third = words[i], words[i+1], words[i+2]     # add third = words[i+2]
+        key = (first, second, third)                    # add third to tuple
 
         if key not in chains:
             chains[key] = []
 
         try:
-            third = words[i+2]
-            chains[key].append(third)
+            fourth = words[i+3]     # changes from i+2 to i+3
+            chains[key].append(fourth)  # changes from third to fourth
         except:
             chains[key].append(None)
+
+    print chains
 
     return chains
 
@@ -69,13 +71,23 @@ def make_text(chains):
 
     words = []
 
+    # WORKING ON CAPITALIZATION
+
+    # upper_chains = {}
+
+    # for key, value in chains.items():
+    #     if key[0][0].isupper():
+    #         upper_chains[key] = value
+
+    # print upper_chains
+
     current_key = tuple(choice(chains.keys()))
     words.extend(current_key)
 
     while True:
         new_link = choice(chains[current_key])
         words.append(new_link)
-        current_key = tuple(words[-2:])
+        current_key = tuple(words[-3:])     # changes from -2 to -3
         if None in chains[current_key]:
             break
 
